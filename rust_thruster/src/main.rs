@@ -14,13 +14,13 @@ mod hello_world {
 }
 
 #[middleware_fn]
-pub async fn say_hello(context: Ctx, _next: MiddlewareNext<Ctx>) -> MiddlewareResult<Ctx> {
-    let hello_world_request = context_to_message::<hello_world::HelloRequest>(context)
+pub async fn say_hello(mut context: Ctx, _next: MiddlewareNext<Ctx>) -> MiddlewareResult<Ctx> {
+    let hello_world_request = context_to_message::<hello_world::HelloRequest>(&mut context)
         .await
         .unwrap();
 
     Ok(message_to_context(
-        Ctx::default(),
+        context,
         hello_world::HelloReply {
             message: hello_world_request.name,
         },
